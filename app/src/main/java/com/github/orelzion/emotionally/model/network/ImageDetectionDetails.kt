@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ImageDetectionDetails(
-    val faceRectangle: FaceRectangle,
-    val faceAttributes: FaceAttributes
+    val faceRectangle: FaceRectangle?,
+    val faceAttributes: FaceAttributes?
 )
 
 @Serializable
@@ -17,20 +17,21 @@ data class FaceRectangle(
 )
 
 @Serializable
-data class FaceAttributes(val emotion: Emotion)
+data class FaceAttributes(private val emotion: HashMap<Emotion, Double>) {
+    fun getEmotion(): Emotion? {
+        return emotion.maxBy { it.value }?.key
+    }
+}
 
 @Serializable
-data class Emotion(
-    val anger: Double,
-    val contempt: Double,
-    val disgust: Double,
-    val fear: Double,
-    val happiness: Double,
-    val neutral: Double,
-    val sadness: Double,
-    val surprise: Double
-) {
-    fun getBestRated() =
-        listOf(anger, contempt, disgust, fear, happiness, neutral, sadness, surprise).max()
+enum class Emotion {
+    anger,
+    contempt,
+    disgust,
+    fear,
+    happiness,
+    neutral,
+    sadness,
+    surprise
 }
 

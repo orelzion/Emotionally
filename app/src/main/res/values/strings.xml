@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Emotionally</string>
+    <string name="empty_state_message">Tap here to select an image</string>
+    <string name="try_again">Try Again</string>
+    <string name="choose_another">Try different photo</string>
+    <string name="face_detection_error">Oops, no face could be detected</string>
+    <string name="general_error">Oops, that\'s a shame, I got an error</string>
+    <string name="photo_chooser">Where do you want to get the photo from?</string>
+    <string name="invalid_image_error">Oy, this image cannot be examined</string>
 </resources>
