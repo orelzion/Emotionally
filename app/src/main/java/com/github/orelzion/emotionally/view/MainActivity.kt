@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         )[ImageDetectionViewModel::class.java].also {
             errorView.viewModel = it
             emptyView.viewModel = it
+            selectedImageView.viewModel = it
         }
 
         with(imageDetectionViewModel.imageDetectionStateObserver) {
