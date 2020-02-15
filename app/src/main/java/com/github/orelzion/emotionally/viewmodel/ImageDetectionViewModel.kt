@@ -12,7 +12,6 @@ import com.github.orelzion.emotionally.model.ImageFile
 import com.github.orelzion.emotionally.model.error.FaceDetectionError
 import com.github.orelzion.emotionally.model.error.InvalidImageError
 import com.github.orelzion.emotionally.model.error.NoSelectedImageError
-import com.github.orelzion.emotionally.model.network.Emotion
 import com.github.orelzion.emotionally.model.network.FaceRectangle
 import com.github.orelzion.emotionally.model.network.ImageDetectionDetails
 import com.github.orelzion.emotionally.model.network.Repository
@@ -86,7 +85,7 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
             if (detectionDetails.isSuccessful()) {
                 reportDetected(detectionDetails, bitmap)
             } else {
-                reportError(FaceDetectionError("Server could not detect any face"))
+                reportError(FaceDetectionError(detectionDetails.error?.errorMessage))
             }
         } ?: run {
             reportError(NoSelectedImageError("Tried to move to Success state, but the previous state was not ImageSelected"))
@@ -94,8 +93,9 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
     }
 
     private fun reportDetected(detectionDetails: ImageDetectionDetails, previousBitmap: Bitmap) {
-        cropImageToFace(previousBitmap, detectionDetails.faceRectangle!!)?.let {
-            FaceImage(it, detectionDetails.faceAttributes!!.getEmotion() ?: Emotion.neutral)
+        val (faceRectangle, emotion) = detectionDetails
+        cropImageToFace(previousBitmap, faceRectangle!!)?.let {
+            FaceImage(it, emotion!!)
         }?.also {
             _stateLiveData.postValue(ImageDetectionState.FaceDetected(it))
         }
@@ -116,7 +116,7 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
     }
 
     private fun ImageDetectionDetails.isSuccessful(): Boolean {
-        return this.faceAttributes != null && this.faceRectangle != null
+        return error == null
     }
 
     fun onTryAgainClicked() {

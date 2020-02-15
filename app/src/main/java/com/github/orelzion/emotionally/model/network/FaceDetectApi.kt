@@ -13,9 +13,9 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface FaceDetectApi {
-    @POST("face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=emotion&recognitionModel=recognition_01&returnRecognitionModel=false&detectionModel=detection_01")
+    @POST("face/detect")
     @Headers("Content-Type: application/octet-stream")
-    suspend fun detectFace(@Body imageBody: RequestBody): List<ImageDetectionDetails>
+    suspend fun detectFace(@Body imageBody: RequestBody): ImageDetectionDetails
 }
 
 
@@ -40,7 +40,7 @@ private val client = OkHttpClient.Builder()
 
 // Creating API instance
 val faceDetectApi = Retrofit.Builder()
-    .baseUrl("https://francecentral.api.cognitive.microsoft.com/")
+    .baseUrl("https://frozen-thicket-74277.herokuapp.com/")
     .addConverterFactory(Json.nonstrict.asConverterFactory("application/json".toMediaType()))
     .client(client)
     .build()

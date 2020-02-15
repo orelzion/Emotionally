@@ -10,6 +10,6 @@ class Repository(private val detectApi: FaceDetectApi) {
             .readBytes()
             .toRequestBody("application/octet-stream".toMediaType())
 
-        return detectApi.detectFace(requestBody).first()
+        return detectApi.detectFace(requestBody)
     }
 }

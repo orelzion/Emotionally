@@ -45,7 +45,7 @@ class ImageSelectedView @JvmOverloads constructor(
 
     private fun onSuccessState(faceImage: FaceImage) {
         visibility = View.VISIBLE
-        emotionText.text = faceImage.emotion.toString()
+        emotionText.text = faceImage.emotion
         selectedImage.setImageBitmap(faceImage.croppedBitmap)
     }
 }
