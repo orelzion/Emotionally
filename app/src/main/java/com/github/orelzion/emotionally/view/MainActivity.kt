@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         imageDetectionViewModel = ViewModelProvider(
             this,
-            ImageDetectionViewModel.BreedsListModelFactory(Repository(faceDetectApi))
+            ImageDetectionViewModel.ImageDetectionViewModelFactory(Repository(faceDetectApi))
         )[ImageDetectionViewModel::class.java].also {
             errorView.viewModel = it
             emptyView.viewModel = it

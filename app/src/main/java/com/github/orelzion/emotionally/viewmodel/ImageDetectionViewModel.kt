@@ -27,7 +27,7 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
 
     private val cameraPermission = Manifest.permission.CAMERA
 
-    class BreedsListModelFactory(private val repository: Repository) :
+    class ImageDetectionViewModelFactory(private val repository: Repository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return ImageDetectionViewModel(repository) as T
