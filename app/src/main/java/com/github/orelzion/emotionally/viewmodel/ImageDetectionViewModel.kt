@@ -126,6 +126,7 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
 
     fun onChooseAnotherClicked() {
         _stateLiveData.postValue(ImageDetectionState.Empty)
+        onOpenImageChooserClicked()
     }
 
     fun onPermissionResult(permission: String, granted: Boolean) {
