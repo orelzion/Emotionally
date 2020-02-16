@@ -15,7 +15,7 @@ import retrofit2.http.POST
 interface FaceDetectApi {
     @POST("face/detect")
     @Headers("Content-Type: application/octet-stream")
-    suspend fun detectFace(@Body imageBody: RequestBody): ImageDetectionDetails
+    suspend fun detectFace(@Body imageBody: RequestBody): FaceDetectionResponse
 }
 
 

@@ -5,7 +5,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class Repository(private val detectApi: FaceDetectApi) {
-    suspend fun detectFace(imageFileToExem: File): ImageDetectionDetails {
+    suspend fun detectFace(imageFileToExem: File): FaceDetectionResponse {
         val requestBody = imageFileToExem
             .readBytes()
             .toRequestBody("application/octet-stream".toMediaType())

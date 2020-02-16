@@ -12,8 +12,9 @@ import com.github.orelzion.emotionally.model.ImageFile
 import com.github.orelzion.emotionally.model.error.FaceDetectionError
 import com.github.orelzion.emotionally.model.error.InvalidImageError
 import com.github.orelzion.emotionally.model.error.NoSelectedImageError
+import com.github.orelzion.emotionally.model.network.FaceDetectionDetails
+import com.github.orelzion.emotionally.model.network.FaceDetectionResponse
 import com.github.orelzion.emotionally.model.network.FaceRectangle
-import com.github.orelzion.emotionally.model.network.ImageDetectionDetails
 import com.github.orelzion.emotionally.model.network.Repository
 import kotlinx.coroutines.launch
 import pl.aprilapps.easyphotopicker.EasyImage
@@ -73,29 +74,29 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
 
         viewModelScope.launch {
             try {
-                onReceiveDetectionDetails(repository.detectFace(file))
+                onReceiveDetectionResponse(repository.detectFace(file))
             } catch (exception: Exception) {
                 reportError(FaceDetectionError(error = exception))
             }
         }
     }
 
-    private fun onReceiveDetectionDetails(detectionDetails: ImageDetectionDetails) {
+    private fun onReceiveDetectionResponse(faceDetectionResponse: FaceDetectionResponse) {
         selectedImageFile?.run {
-            if (detectionDetails.isSuccessful()) {
-                reportDetected(detectionDetails, bitmap)
-            } else {
-                reportError(FaceDetectionError(detectionDetails.error?.errorMessage))
+            faceDetectionResponse.faceDetectionDetails?.run {
+                reportDetected(this, bitmap)
+            } ?: run {
+                reportError(FaceDetectionError(faceDetectionResponse.error?.errorMessage))
             }
         } ?: run {
             reportError(NoSelectedImageError("Tried to move to Success state, but the previous state was not ImageSelected"))
         }
     }
 
-    private fun reportDetected(detectionDetails: ImageDetectionDetails, previousBitmap: Bitmap) {
+    private fun reportDetected(detectionDetails: FaceDetectionDetails, previousBitmap: Bitmap) {
         val (faceRectangle, emotion) = detectionDetails
-        cropImageToFace(previousBitmap, faceRectangle!!)?.let {
-            FaceImage(it, emotion!!)
+        cropImageToFace(previousBitmap, faceRectangle)?.let {
+            FaceImage(it, emotion)
         }?.also {
             _stateLiveData.postValue(ImageDetectionState.FaceDetected(it))
         }
@@ -113,10 +114,6 @@ class ImageDetectionViewModel(private val repository: Repository) : ViewModel() 
             faceRectangle.width,
             faceRectangle.height
         )
-    }
-
-    private fun ImageDetectionDetails.isSuccessful(): Boolean {
-        return error == null
     }
 
     fun onTryAgainClicked() {

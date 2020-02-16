@@ -3,10 +3,15 @@ package com.github.orelzion.emotionally.model.network
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ImageDetectionDetails(
-    val faceRectangle: FaceRectangle? = null,
-    val emotion: String? = null,
+data class FaceDetectionResponse(
+    val faceDetectionDetails: FaceDetectionDetails? = null,
     val error: Error? = null
+)
+
+@Serializable
+data class FaceDetectionDetails(
+    val faceRectangle: FaceRectangle,
+    val emotion: String
 )
 
 @Serializable
